@@ -1,5 +1,5 @@
 #include <iostream>
-#include "RequestHandler.cpp"
+#include "RequestHandler.H"
 
 int main() {
 	RequestHandler handler;

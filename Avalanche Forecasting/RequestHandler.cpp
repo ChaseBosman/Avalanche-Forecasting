@@ -1,3 +1,4 @@
+#include "RequestHandler.h"
 #include <boost/beast/core.hpp>
 #include <boost/beast/http.hpp>
 #include <boost/beast/version.hpp>
@@ -13,29 +14,9 @@ using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 namespace ssl = boost::asio::ssl;       // from <boost/asio/ssl.hpp>
 namespace http = boost::beast::http;    // from <boost/beast/http.hpp>
 
-class RequestHandler
-{
-    const char* host = "utahavalanchecenter.org";
-    const char* port = "443";
-    const char* target = "/forecast/provo/json";
-    int version = 11;
 
-    // The io_context is required for all I/O
-    boost::asio::io_context ioc;
 
-    // This buffer is used for reading and must be persisted
-    boost::beast::flat_buffer buffer;
-
-    // Declare container to hold the response
-    http::response<http::dynamic_body> res;
-
-    //declare a request object to hold request
-    http::request<http::string_body> request;
-
-    const boost::asio::ip::basic_resolver_results<class boost::asio::ip::tcp> domain_name;
-
-public:
-    RequestHandler()
+    RequestHandler::RequestHandler()
     {
         try
         {
@@ -47,7 +28,7 @@ public:
             ssl::stream<tcp::socket> stream{ ioc, ctx };
 
             // Set SNI Hostname (many hosts need this to handshake successfully)
-            set_sni_hostname(stream);
+            this->set_sni_hostname(stream);
 
             // Look up the domain name
             const boost::asio::ip::basic_resolver_results<class boost::asio::ip::tcp> domain_name = resolver.resolve(host, port);
@@ -86,7 +67,7 @@ public:
         }
     }
 
-    void set_sni_hostname(ssl::stream<tcp::socket>& stream)
+    void RequestHandler::set_sni_hostname(ssl::stream<tcp::socket>& stream)
     {
         // Set SNI Hostname (many hosts need this to handshake successfully)
         if (!SSL_set_tlsext_host_name(stream.native_handle(), host))
@@ -96,7 +77,7 @@ public:
         }
     }
 
-    void establish_connection(ssl::stream<tcp::socket>& stream, const boost::asio::ip::basic_resolver_results<class boost::asio::ip::tcp> results)
+    void RequestHandler::establish_connection(ssl::stream<tcp::socket>& stream, const boost::asio::ip::basic_resolver_results<class boost::asio::ip::tcp> results)
     {
         // Make the connection on the IP address we get from a lookup
         boost::asio::connect(stream.next_layer(), results.begin(), results.end());
@@ -105,7 +86,7 @@ public:
         stream.handshake(ssl::stream_base::client);
     }
 
-    http::request<http::string_body> configure_get_request()
+    http::request<http::string_body> RequestHandler::configure_get_request()
     {
         // Set up an HTTP GET request message
         http::request<http::string_body> req{ http::verb::get, target, version };
@@ -114,7 +95,7 @@ public:
         return req;
     }
 
-    void verify_error_code(boost::system::error_code& ec)
+    void RequestHandler::verify_error_code(boost::system::error_code& ec)
     {
         if (ec == boost::asio::error::eof || ec == boost::asio::ssl::error::stream_truncated)
         {
@@ -123,4 +104,4 @@ public:
             ec.assign(0, ec.category());
         }
     }
-};
+

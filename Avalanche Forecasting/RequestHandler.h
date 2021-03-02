@@ -1,3 +1,5 @@
+#ifndef REQUEST_HANDLER_H
+#define REQUEST_HANDLER_H
 #include <boost/beast/core.hpp>
 #include <boost/beast/http.hpp>
 #include <boost/beast/version.hpp>
@@ -8,7 +10,6 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
-#include <memory>
 
 using namespace std;
 using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
@@ -45,3 +46,5 @@ class RequestHandler
 
         void verify_error_code(boost::system::error_code& ec);
 };
+
+#endif /*REQUEST_HANDLER_H*/

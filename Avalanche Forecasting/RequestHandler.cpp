@@ -6,6 +6,8 @@
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/ssl/error.hpp>
 #include <boost/asio/ssl/stream.hpp>
+#include <boost/asio/buffers_iterator.hpp>
+#include <boost/asio/buffers_iterator.hpp>
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -44,7 +46,10 @@ RequestHandler::RequestHandler()
         http::read(stream, buffer, res);
 
         // Write the message to standard out
-        std::cout << res << std::endl;
+        std::string body{ boost::asio::buffers_begin(res.body().data()),
+                   boost::asio::buffers_end(res.body().data()) };
+
+        std::cout << "Body: " << body << "\n";
 
         // Gracefully close the stream
         boost::system::error_code ec;
@@ -101,4 +106,5 @@ void RequestHandler::verify_error_code(boost::system::error_code& ec)
         ec.assign(0, ec.category());
     }
 }
+
 

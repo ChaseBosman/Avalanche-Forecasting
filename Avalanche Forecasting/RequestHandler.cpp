@@ -45,7 +45,6 @@ RequestHandler::RequestHandler()
 
         // Write the message to standard out
         std::cout << res << std::endl;
-        //std::cout << typeid(results).name();
 
         // Gracefully close the stream
         boost::system::error_code ec;
@@ -61,7 +60,7 @@ RequestHandler::RequestHandler()
     catch (std::exception const& e)
     {
         std::cerr << "Error: " << e.what() << std::endl;
-        //return EXIT_FAILURE;
+        throw "Critical Failure!";
     }
 }
 

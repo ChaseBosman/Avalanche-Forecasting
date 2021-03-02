@@ -35,16 +35,18 @@ class RequestHandler
     //declare a request object to hold request
     http::request<http::string_body> request;
 
+    void set_sni_hostname(ssl::stream<tcp::socket>& stream);
+
+    void establish_connection(ssl::stream<tcp::socket>& stream, const boost::asio::ip::basic_resolver_results<class boost::asio::ip::tcp> results);
+
+    http::request<http::string_body> configure_get_request();
+
+    void verify_error_code(boost::system::error_code& ec);
+
     public:
         RequestHandler();
 
-        void set_sni_hostname(ssl::stream<tcp::socket>& stream);
-
-        void establish_connection(ssl::stream<tcp::socket>& stream, const boost::asio::ip::basic_resolver_results<class boost::asio::ip::tcp> results);
-
-        http::request<http::string_body> configure_get_request();
-
-        void verify_error_code(boost::system::error_code& ec);
+        std::string get_response_body();
 };
 
 #endif /*REQUEST_HANDLER_H*/

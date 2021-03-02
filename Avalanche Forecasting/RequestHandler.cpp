@@ -45,12 +45,6 @@ RequestHandler::RequestHandler()
         // Receive the HTTP response
         http::read(stream, buffer, res);
 
-        // Write the message to standard out
-        std::string body{ boost::asio::buffers_begin(res.body().data()),
-                   boost::asio::buffers_end(res.body().data()) };
-
-        std::cout << "Body: " << body << "\n";
-
         // Gracefully close the stream
         boost::system::error_code ec;
         stream.shutdown(ec);
@@ -61,6 +55,7 @@ RequestHandler::RequestHandler()
             throw boost::system::system_error{ ec };
 
         // If we get here then the connection is closed gracefully
+
     }
     catch (std::exception const& e)
     {
@@ -107,4 +102,11 @@ void RequestHandler::verify_error_code(boost::system::error_code& ec)
     }
 }
 
+std::string RequestHandler::get_response_body()
+{
+    std::string body{ boost::asio::buffers_begin(res.body().data()),
+               boost::asio::buffers_end(res.body().data()) };
+
+    return body;
+}
 

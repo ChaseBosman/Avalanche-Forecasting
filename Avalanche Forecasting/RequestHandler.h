@@ -8,16 +8,18 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <memory>
 
+using namespace std;
 using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 namespace ssl = boost::asio::ssl;       // from <boost/asio/ssl.hpp>
 namespace http = boost::beast::http;    // from <boost/beast/http.hpp>
 
 class RequestHandler
 {
-    const char* host = "utahavalanchecenter.org";
-    const char* port = "443";
-    const char* target = "/forecast/provo/json";
+    const char host[24] = "utahavalanchecenter.org";
+    const string port = "443";
+    const string target = "/forecast/provo/json";
     int version = 11;
 
     // The io_context is required for all I/O

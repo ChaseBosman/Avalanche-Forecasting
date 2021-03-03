@@ -18,9 +18,9 @@ namespace http = boost::beast::http;    // from <boost/beast/http.hpp>
 
 class RequestHandler
 {
-    const char host[24] = "utahavalanchecenter.org";
+    const char host[25] = "utahavalanchecenter.org";
     const string port = "443";
-    const string target = "/forecast/provo/json";
+    const string target;
     int version = 11;
 
     // The io_context is required for all I/O
@@ -44,7 +44,7 @@ class RequestHandler
     void verify_error_code(boost::system::error_code& ec);
 
     public:
-        RequestHandler();
+        RequestHandler(const string location);
 
         std::string get_response_body();
 };

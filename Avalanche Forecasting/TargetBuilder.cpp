@@ -4,6 +4,7 @@
 
 		TargetBuilder::TargetBuilder(std::string location) 
 		{
+			//target directory for HTTPS request
 			target = "/forecast/" + location + "/json";
 		}
 
